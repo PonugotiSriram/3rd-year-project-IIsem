@@ -103,12 +103,6 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
             config: {
                 responseMimeType: "application/json",
                 maxOutputTokens: 8192,
-                safetySettings: [
-                    { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-                    { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
-                    { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-                    { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' }
-                ]
             }
         });
 
@@ -119,10 +113,8 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
             }
             return JSON.parse(jsonStr);
         } catch (parseError) {
-            console.error("JSON PARSE ERROR:", parseError.message);
-            console.error("RAW JSON OUTPUT (First 500 chars):", jsonStr.substring(0, 500));
-            console.error("RAW JSON OUTPUT (Last 500 chars):", jsonStr.substring(jsonStr.length - 500));
-            throw new Error("AI returned invalid JSON structure: " + parseError.message);
+            console.error("RAW JSON OUTPUT FROM AI:", jsonStr);
+            throw new Error("AI returned invalid JSON structure.");
         }
     } catch (error) {
         console.error("AI Analysis Error:", error);
