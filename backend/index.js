@@ -76,6 +76,11 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
             "content": [ { "before": "exact weak phrase from text", "after": "enhanced phrase with metrics", "reason": "why this is better" } ],
             "summary": [ { "before": "current generic summary", "after": "tailored summary", "reason": "why" } ],
             "skills": [ { "current": "academic or generic term", "optimized": "industry standard term" } ]
+          },
+          "learningRoadmap": [ { "skill": "Missing or weak skill name", "resources": ["Resource 1 to learn", "Resource 2", "Resource 3"] } ],
+          "interviewQuestions": {
+            "behavioral": ["Question 1 based on resume", "Question 2", "Question 3", "Question 4", "Question 5"],
+            "technical": ["Question 1 based on tech stack in resume", "Question 2", "Question 3", "Question 4", "Question 5"]
           }
         }
 
@@ -84,6 +89,8 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
         You must provide a comprehensive list of suggestions inside the "content" array, targeting up to 10 of the most critical improvements across the resume. Each improvement must target a different sentence or bullet point.
         For "spelling", strictly return actual typos if present, otherwise an empty array.
         If a section like 'summary' does not exist, use "before": "(None)" and write an impressive missing summary.
+        For learningRoadmap, provide concrete specific resource names (e.g. "FreeCodeCamp Node.js Crash Course") for 2 or 3 missing skills if there is a job description.
+        For interviewQuestions, predict exactly 5 behavioral and 5 technical questions the user is exceedingly likely to face based on their specific listed projects and skills.
 
         Resume Text:
         """${text}"""
@@ -96,6 +103,12 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
             config: {
                 responseMimeType: "application/json",
                 maxOutputTokens: 8192,
+                safetySettings: [
+                    { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' }
+                ]
             }
         });
 
@@ -106,8 +119,10 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
             }
             return JSON.parse(jsonStr);
         } catch (parseError) {
-            console.error("RAW JSON OUTPUT FROM AI:", jsonStr);
-            throw new Error("AI returned invalid JSON structure.");
+            console.error("JSON PARSE ERROR:", parseError.message);
+            console.error("RAW JSON OUTPUT (First 500 chars):", jsonStr.substring(0, 500));
+            console.error("RAW JSON OUTPUT (Last 500 chars):", jsonStr.substring(jsonStr.length - 500));
+            throw new Error("AI returned invalid JSON structure: " + parseError.message);
         }
     } catch (error) {
         console.error("AI Analysis Error:", error);
@@ -212,6 +227,31 @@ app.post('/api/analyze', async (req, res) => {
             success: false,
             error: error.message || "Internal Server Error"
         });
+    }
+});
+
+app.post('/api/boost-impact', async (req, res) => {
+    try {
+        const { sentence, metric } = req.body;
+        if (!sentence) return res.status(400).json({ error: "Missing sentence" });
+
+        let prompt = "";
+        if (!metric) {
+            prompt = `The user wants to improve this boring resume sentence by adding a metric/number: "${sentence}". Ask a single, direct question to extract a specific numerical metric (e.g. "How many users?", "What percentage faster?", "How large was the team?"). Keep the question under 15 words. ONLY RETURN THE QUESTION. NO INTROS.`;
+        } else {
+            prompt = `Rewrite this resume sentence to seamlessly include this metric/result: "${metric}". Sentence: "${sentence}". Make it sound highly professional, action-oriented, and ATS-friendly. ONLY RETURN THE REWRITTEN SENTENCE. NO INTROS.`;
+        }
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+            config: { maxOutputTokens: 256 }
+        });
+
+        return res.json({ result: response.text.trim() });
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({ error: "Failed to boost impact." });
     }
 });
 
