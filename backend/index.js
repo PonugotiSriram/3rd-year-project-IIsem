@@ -6,6 +6,8 @@ const require = createRequire(import.meta.url);
 const pdfParse = require('pdf-parse');
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import { jsonrepair } from 'jsonrepair';
 
 dotenv.config();
 
@@ -91,6 +93,11 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
         If a section like 'summary' does not exist, use "before": "(None)" and write an impressive missing summary.
         For learningRoadmap, provide concrete specific resource names (e.g. "FreeCodeCamp Node.js Crash Course") for 2 or 3 missing skills if there is a job description.
         For interviewQuestions, predict exactly 5 behavioral and 5 technical questions the user is exceedingly likely to face based on their specific listed projects and skills.
+        
+        CRITICAL INSTRUCTIONS FOR JSON VALIDITY:
+        1. DO NOT include literal newlines in strings. Replace them with spaces or escaped \\n.
+        2. DO NOT output any text outside the JSON object.
+        3. DO NOT include trailing commas.
 
         Resume Text:
         """${text}"""
@@ -109,12 +116,25 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
         let jsonStr = response.text;
         try {
             if (jsonStr) {
+                // Remove markdown blocks if still present
                 jsonStr = jsonStr.replace(/```json/gi, '').replace(/```/g, '').trim();
+                
+                // Extract only the JSON object
+                const firstBrace = jsonStr.indexOf('{');
+                const lastBrace = jsonStr.lastIndexOf('}');
+                
+                if (firstBrace !== -1 && lastBrace !== -1 && lastBrace >= firstBrace) {
+                    jsonStr = jsonStr.substring(firstBrace, lastBrace + 1);
+                }
+                
+                // Repair the JSON structure using jsonrepair
+                jsonStr = jsonrepair(jsonStr);
             }
             return JSON.parse(jsonStr);
         } catch (parseError) {
-            console.error("RAW JSON OUTPUT FROM AI:", jsonStr);
-            throw new Error("AI returned invalid JSON structure.");
+            console.error("RAW JSON OUTPUT FROM AI:", response.text);
+            fs.writeFileSync('bad_json.txt', response.text);
+            throw new Error(`AI returned invalid JSON structure: ${parseError.message}`);
         }
     } catch (error) {
         console.error("AI Analysis Error:", error);
