@@ -1,6 +1,7 @@
-# AI Resume Analyzer Platform
+# 🚀 AI Resume Analyzer Platform
+> **🎓 Academic Project Status: Finalized / Completed** ✅
 
-An advanced, AI-powered resume analysis and optimization platform. This application leverages Google's Gemini AI to analyze resumes (PDF, DOCX, Images), compare them against target job descriptions, and provide highly structured, tailored feedback including ATS scores, skill gaps, and quantifiable impact improvements.
+An advanced, AI-powered resume analysis and optimization platform built as a **3rd-Year (II Semester) Academic Project**. This application leverages Google's Gemini AI to analyze resumes (PDF, DOCX, Images), compare them against target job descriptions, and provide highly structured, tailored feedback including ATS scores, skill gaps, and quantifiable impact improvements.
 
 ## 🚀 Features
 
