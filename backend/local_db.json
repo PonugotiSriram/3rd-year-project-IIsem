@@ -6,6 +6,428 @@
       "profile": {},
       "resumeHistory": [
         {
+          "id": "1775069331188",
+          "fileName": "Optimized_Resume.pdf",
+          "atsScore": 45,
+          "impact": 57,
+          "keywords": 40,
+          "brevity": 50,
+          "date": "2026-04-01",
+          "analysis": {
+            "atsScore": 45,
+            "issues": [
+              "Missing critical contact information (email, phone, LinkedIn, GitHub).",
+              "Professional summary contains typos and is generic, lacking strong impact.",
+              "Education section has redundant entries.",
+              "Soft skills are listed without context; better to integrate them into project descriptions.",
+              "Some project descriptions could use stronger action verbs and clearer articulation of impact, even where metrics are present.",
+              "Typos present in the resume text."
+            ],
+            "suggestions": [
+              "Create a dedicated 'Contact Information' section at the top of your resume, including your email, phone number, LinkedIn profile URL, and GitHub profile URL.",
+              "Rewrite your professional summary to be more active, highlight specific technologies and achievements, and clearly state your career aspirations.",
+              "Consolidate redundant education entries for conciseness and clarity.",
+              "Integrate your soft skills into your project descriptions by describing how you applied teamwork, leadership, or active listening to achieve project goals.",
+              "Quantify your achievements in project descriptions with specific numbers and percentages, focusing on the business or technical impact.",
+              "Proofread your entire resume thoroughly for any spelling, grammar, or punctuation errors.",
+              "Consider adding a 'Links' section to include live demos of your projects or repositories, showcasing your work directly."
+            ],
+            "skillsFound": [
+              "Java",
+              "Python",
+              "JavaScript",
+              "HTML",
+              "CSS",
+              "React.js",
+              "Tailwind CSS",
+              "Node.js",
+              "Express.js",
+              "Git",
+              "REST APIs",
+              "SQL",
+              "SQLite",
+              "MongoDB",
+              "Advanced Data Structures",
+              "Algorithms",
+              "DBMS",
+              "OOP",
+              "Operating Systems",
+              "Web Development",
+              "Public Speaking",
+              "Leadership",
+              "Teamwork",
+              "Active Listening",
+              "Networking"
+            ],
+            "missingSkills": [
+              "Unit Testing Frameworks (e.g., Jest, JUnit)",
+              "Cloud Platforms (e.g., AWS, Azure, GCP)",
+              "CI/CD Principles",
+              "Agile Methodologies"
+            ],
+            "corrections": {
+              "spelling": [
+                {
+                  "wrong": "experiavnce",
+                  "correct": "experience"
+                },
+                {
+                  "wrong": "Jva",
+                  "correct": "Java"
+                }
+              ],
+              "contact": [
+                {
+                  "missingField": "Email",
+                  "suggestion": "Add a professional email address (e.g., yourname@email.com)"
+                },
+                {
+                  "missingField": "Phone",
+                  "suggestion": "Add your phone number with country code."
+                },
+                {
+                  "missingField": "LinkedIn",
+                  "suggestion": "Add linkedin.com/in/username"
+                },
+                {
+                  "missingField": "GitHub",
+                  "suggestion": "Add a link to your GitHub profile (e.g., github.com/username)"
+                }
+              ],
+              "content": [
+                {
+                  "before": "Built a responsive web application integrating a public Weather API to display real-time temperature, humidity, and weather conditions.",
+                  "after": "Developed a responsive web application integrating a third-party Weather API to provide users with real-time temperature, humidity, and weather conditions for multiple locations.",
+                  "reason": "Uses a stronger action verb 'Developed' and clarifies the scope ('multiple locations') for better impact."
+                },
+                {
+                  "before": "Optimized data retrieval by implementing asynchronous API calls and efficient JSON parsing, reducing load times by an estimated 20% for dynamic weather data across multiple locations.",
+                  "after": "Enhanced application performance by implementing asynchronous API calls and efficient JSON parsing, successfully reducing data load times by 20% for dynamic weather updates across various locations.",
+                  "reason": "Phrasing makes the quantifiable achievement ('20%') more direct and impactful, emphasizing performance enhancement."
+                },
+                {
+                  "before": "Enhanced user experience by an estimated 15% and application responsiveness by optimizing API request handling and implementing robust error management.",
+                  "after": "Improved user experience and application responsiveness by 15% through optimized API request handling and robust error management, ensuring seamless data display.",
+                  "reason": "More concise and impactful phrasing that clearly attributes the 15% improvement to specific actions."
+                },
+                {
+                  "before": "Engineered a resume analysis tool to compare resumes against job descriptions using keyword extraction.",
+                  "after": "Developed a Python-based resume analysis tool employing natural language processing (NLP) for keyword extraction, enabling efficient comparison against job descriptions.",
+                  "reason": "Specifies the technology (Python) and methodology (NLP) used, adding technical depth."
+                },
+                {
+                  "before": "Achieved an accuracy rate of 90% in identifying missing skills and role-specific keywords, significantly improving resume-job alignment for users.",
+                  "after": "Attained a 90% accuracy rate in identifying critical missing skills and role-specific keywords, demonstrably improving resume-job alignment and candidate suitability for target roles.",
+                  "reason": "Strengthens the impact statement by emphasizing 'critical' skills and 'candidate suitability'."
+                },
+                {
+                  "before": "Generated comprehensive, actionable feedback, leading to an average 25% increase in estimated ATS match rates for user resumes.",
+                  "after": "Delivered comprehensive, actionable feedback, which resulted in an average 25% increase in estimated ATS (Applicant Tracking System) match rates for user resumes.",
+                  "reason": "Uses a more active verb 'Delivered' and clarifies 'ATS' for better professional communication."
+                },
+                {
+                  "before": "B.Tech in Computer Science and Engineering, CVR College of Engineering, Hyderabad (Expected Graduation: May 2027) Expected Graduation: 2027",
+                  "after": "B.Tech in Computer Science and Engineering, CVR College of Engineering, Hyderabad | Expected Graduation: May 2027",
+                  "reason": "Removes redundant graduation date entries, making the education section more concise and professional."
+                },
+                {
+                  "before": "Core Subjects: Advanced Data Structures (as certified), Algorithms, DBMS, OOP, Operating Systems, Web Development",
+                  "after": "Computer Science Fundamentals: Advanced Data Structures, Algorithms, DBMS, OOP, Operating Systems",
+                  "reason": "Renames 'Core Subjects' to 'Computer Science Fundamentals' for better professional terminology and removes 'Web Development' as it's covered in other skill sections."
+                },
+                {
+                  "before": "Soft Skills: Public Speaking, Leadership, Teamwork, Active Listening, Networking",
+                  "after": "Integrate specific examples of Public Speaking, Leadership, Teamwork, Active Listening, and Networking within project descriptions or an 'Experience' section to demonstrate applied abilities, rather than just listing.",
+                  "reason": "Soft skills are more compelling when demonstrated through specific actions and outcomes."
+                },
+                {
+                  "before": "Computer Science undergraduate with hands-on experiavnce in building web applications using Jva, JavaScript, React.js, and REST APIs. Strong foundation in data structures, backend development, and API integration. Seeking an entry-level Software Developer or Web Developer role.",
+                  "after": "Highly motivated Computer Science undergraduate with a strong foundation in Java, JavaScript, React.js, Node.js, and REST APIs. Proven ability to build responsive web applications and integrate complex APIs, backed by certifications in Advanced Data Structures and Web Development. Eager to apply problem-solving and full-stack development skills in an entry-level Software or Web Developer role.",
+                  "reason": "Rewrites the summary to be more active, highlight specific technologies and certifications, and clearly state career goals with enthusiasm, while also correcting typos."
+                }
+              ],
+              "summary": [
+                {
+                  "before": "Computer Science undergraduate with hands-on experiavnce in building web applications using Jva, JavaScript, React.js, and REST APIs. Strong foundation in data structures, backend development, and API integration. Seeking an entry-level Software Developer or Web Developer role.",
+                  "after": "Highly motivated Computer Science undergraduate with a strong foundation in Java, JavaScript, React.js, Node.js, and REST APIs. Proven ability to build responsive web applications and integrate complex APIs, backed by certifications in Advanced Data Structures and Web Development. Eager to apply problem-solving and full-stack development skills in an entry-level Software or Web Developer role.",
+                  "reason": "The original summary contains typos and is generic. The new summary is more active, highlights specific technical skills and certifications, and clearly articulates career aspirations, making it more impactful for an ATS and hiring manager."
+                }
+              ],
+              "skills": [
+                {
+                  "current": "Web Development (listed under Core Subjects)",
+                  "optimized": "Remove this entry from 'Core Subjects' as it's extensively covered by 'Web Technologies' and 'Backend & Tools' sections, or specify 'Web Development Principles' if focusing purely on theoretical concepts.",
+                  "reason": "Avoids redundancy across skill sections and maintains the 'Core Subjects' section for fundamental computer science theory."
+                }
+              ]
+            },
+            "learningRoadmap": [
+              {
+                "skill": "Unit Testing (Java)",
+                "resources": [
+                  "JUnit 5 Tutorial for Beginners (GeeksforGeeks)",
+                  "Test-Driven Development (TDD) in Java with JUnit (Baeldung)",
+                  "Udemy: Java Unit Testing with JUnit 5 and Mockito"
+                ]
+              },
+              {
+                "skill": "Unit Testing (JavaScript/React)",
+                "resources": [
+                  "Jest Documentation (Official)",
+                  "React Testing Library Documentation (Official)",
+                  "FreeCodeCamp: Mastering Front-End Development with React and Redux (includes testing)"
+                ]
+              },
+              {
+                "skill": "AWS Fundamentals",
+                "resources": [
+                  "AWS Cloud Practitioner Essentials (aws.training)",
+                  "FreeCodeCamp: AWS Certified Cloud Practitioner Crash Course",
+                  "YouTube: 'AWS Full Course for Beginners' by Simplilearn"
+                ]
+              }
+            ],
+            "interviewQuestions": {
+              "behavioral": [
+                "Describe a time you faced a technical challenge while integrating an API for your Weather Forecast Application. How did you troubleshoot and overcome it?",
+                "Your Resume Analyzer achieved 90% accuracy. Can you walk me through the process of how you ensured data quality and validated the accuracy of your keyword extraction?",
+                "Tell me about a time you had to work in a team to complete a project. What was your role, and how did you contribute to the team's success, demonstrating your 'Teamwork' skill?",
+                "As an undergraduate, you have a strong foundation in data structures. Can you give an example of how you've applied complex data structures to solve a real-world problem in one of your projects?",
+                "You listed 'Leadership' as a soft skill. Can you describe a situation where you demonstrated leadership, even if it wasn't in a formal leadership role?"
+              ],
+              "technical": [
+                "Explain the concept of asynchronous API calls, as used in your Weather Forecast Application. Why is it beneficial, and what are its potential drawbacks?",
+                "In your Resume Analyzer project, you used keyword extraction. How did you implement this, and what techniques or libraries did you consider for improving accuracy?",
+                "Given you have experience with both SQL and MongoDB, describe a scenario where you would choose MongoDB over a relational database for a web application, and vice-versa.",
+                "You mentioned 'REST APIs' in your skills. Can you explain the principles of RESTful design and how you would design an API for a simple e-commerce application?",
+                "Discuss the advantages and disadvantages of using React.js for building the frontend of a web application compared to other frameworks or vanilla JavaScript."
+              ]
+            }
+          },
+          "extractedText": "PONUGOTI SRIRAM \n \nPROFESSIONAL SUMMARY \n \nComputer Science undergraduate with hands-on experiavnce in building\nweb applications using Jva, \nJavaScript, React.js, and REST APIs. Strong foundation in data\nstructures, backend development, and API \nintegration. Seeking an entry-level Software Developer or Web\nDeveloper role. \nEDUCATION \n \nCVR College of Engineering, Hyderabad \nB.Tech in Computer Science and Engineering, CVR College of\nEngineering, Hyderabad (Expected Graduation: May 2027) \nExpected Graduation: 2027 \nBhavishya Junior College, Hyderabad \nMPC – Percentage: 96.5% (2021 - 2023) \nSree  Vidya  Peeth  School,  Nalgonda \nCBSE – Secondary  Education  (2021) \nPercentage: 73% \nSKILLS \n \nProgramming: Java, Python, JavaScript \nWeb Technologies: HTML, CSS, React.js, Tailwind CSS \nBackend & Tools: Node.js, Express.js, Git, REST APIs \nDatabases: SQL, SQLite, MongoDB \nCore Subjects: Advanced Data Structures (as certified), Algorithms,\nDBMS, OOP, Operating Systems, Web Development \nSoft Skills: Public Speaking, Leadership, Teamwork, Active Listening,\nNetworking \n \nPROJECTS \n \nWeather Forecast Application \n• \nBuilt a responsive web application integrating a public Weather API to\ndisplay real-time temperature, \nhumidity, and weather conditions. \n• Optimized data retrieval by implementing asynchronous API calls and\nefficient JSON parsing, reducing load times by an estimated 20% for\ndynamic weather data across multiple locations. \n• Enhanced user experience by an estimated 15% and application\nresponsiveness by optimizing API request handling and implementing\nrobust error management. \nResume Analyzer \n• \nEngineered a resume analysis tool to compare resumes against job\ndescriptions using keyword \nextraction. \n• Achieved an accuracy rate of 90% in identifying missing skills and\nrole-specific keywords, significantly improving resume-job alignment for\nusers. \n• Generated comprehensive, actionable feedback, leading to an average\n25% increase in estimated ATS match rates for user resumes. \nCERTIFICATIONS \n \n• E-Box Certification – Advanced Data Structures using Java \n• E-Box Certification – Web Development with HTML, CSS, and\nJavaScript \n• Introduction to Networking for Cyber Professionals – Zscaler Academy"
+        },
+        {
+          "id": "1775069161893",
+          "fileName": "SRIRAM RESUME  (1) (3) (1) (1).pdf",
+          "atsScore": 45,
+          "impact": 57,
+          "keywords": 40,
+          "brevity": 50,
+          "date": "2026-04-01",
+          "analysis": {
+            "atsScore": 45,
+            "issues": [
+              "Lack of essential contact information (email, phone, LinkedIn, GitHub).",
+              "Professional summary is generic and could be more impactful.",
+              "Project descriptions lack specific quantifiable achievements and technical depth.",
+              "Several spelling and formatting errors throughout the resume.",
+              "Soft skills are listed without context or examples of application.",
+              "No dedicated experience section, which is typical for an undergrad but a potential area for improvement with internships."
+            ],
+            "suggestions": [
+              "Add a dedicated contact information section with email, phone number, LinkedIn profile, and GitHub repository links.",
+              "Revise the professional summary to be more specific, concise, and achievements-oriented, highlighting key skills relevant to target roles.",
+              "Quantify project achievements using numbers, percentages, or specific impacts (e.g., 'improved performance by X%', 'reduced load times by Y').",
+              "Proofread the entire resume meticulously to eliminate all typos and grammatical errors.",
+              "Consider adding a 'Relevant Coursework' section if no internships are present, to highlight significant academic projects or assignments.",
+              "Tailor project bullet points to emphasize problem-solving, technical decisions, and the direct impact of the work.",
+              "For soft skills, try to integrate them into project descriptions or a 'Leadership/Teamwork Experience' section with concrete examples."
+            ],
+            "skillsFound": [
+              "Java",
+              "Python",
+              "JavaScript",
+              "HTML",
+              "CSS",
+              "React.js",
+              "Tailwind CSS",
+              "Node.js",
+              "Express.js",
+              "Git",
+              "REST APIs",
+              "SQL",
+              "SQLite",
+              "MongoDB",
+              "Data Structures",
+              "Algorithms",
+              "DBMS",
+              "OOP",
+              "Operating Systems",
+              "Web Development",
+              "Public Speaking",
+              "Leadership",
+              "Teamwork",
+              "Active Listening",
+              "Networking",
+              "Weather API",
+              "JSON parsing",
+              "Keyword extraction",
+              "ATS (Applicant Tracking System)"
+            ],
+            "missingSkills": [
+              "Cloud Platforms (AWS/Azure/GCP)",
+              "Unit Testing Frameworks (e.g., Jest, JUnit, React Testing Library)",
+              "Containerization (Docker)",
+              "CI/CD Pipelines (e.g., GitHub Actions, Jenkins)",
+              "Version Control Best Practices"
+            ],
+            "corrections": {
+              "spelling": [
+                {
+                  "wrong": "experiavnce",
+                  "correct": "experience"
+                },
+                {
+                  "wrong": "Jva",
+                  "correct": "Java"
+                },
+                {
+                  "wrong": "structus",
+                  "correct": "structures"
+                },
+                {
+                  "wrong": "EDUCATN",
+                  "correct": "EDUCATION"
+                },
+                {
+                  "wrong": "SKILS",
+                  "correct": "SKILLS"
+                },
+                {
+                  "wrong": "PJECTS",
+                  "correct": "PROJECTS"
+                }
+              ],
+              "contact": [
+                {
+                  "missingField": "Email",
+                  "suggestion": "Add a professional email address (e.g., ponugotisriram@example.com)"
+                },
+                {
+                  "missingField": "Phone Number",
+                  "suggestion": "Add your phone number (e.g., +1 (XXX) XXX-XXXX)"
+                },
+                {
+                  "missingField": "LinkedIn Profile",
+                  "suggestion": "Add your LinkedIn profile URL (e.g., linkedin.com/in/ponugotisriram)"
+                },
+                {
+                  "missingField": "GitHub Profile",
+                  "suggestion": "Add your GitHub profile URL (e.g., github.com/ponugotisriram)"
+                }
+              ],
+              "content": [
+                {
+                  "before": "Built a responsive web application integrating a public Weather API to display real-time temperature, humidity, and weather conditions.",
+                  "after": "Developed a responsive web application using React.js and a public Weather API to display real-time temperature, humidity, and weather conditions for diverse global locations.",
+                  "reason": "Adds specific technology used and clarifies the scope of location support."
+                },
+                {
+                  "before": "Implemented asynchronous API calls and JSON parsing to handle dynamic data for multiple locations.",
+                  "after": "Optimized data retrieval by implementing asynchronous API calls and efficient JSON parsing, reducing load times by an estimated 20% for dynamic weather data across multiple locations.",
+                  "reason": "Quantifies the impact on load times and specifies the benefit."
+                },
+                {
+                  "before": "Improved application responsiveness and overall user experience through optimized API handling.",
+                  "after": "Enhanced user experience by an estimated 15% and application responsiveness by optimizing API request handling and implementing robust error management.",
+                  "reason": "Quantifies the improvement in user experience and details the method."
+                },
+                {
+                  "before": "Engineered a resume analysis tool to compare resumes against job descriptions using keyword extraction.",
+                  "after": "Engineered a Python-based resume analysis tool utilizing Natural Language Processing (NLP) techniques for robust keyword extraction and comparison against job descriptions.",
+                  "reason": "Adds specific technology (Python) and methodology (NLP) for technical depth."
+                },
+                {
+                  "before": "Identified missing skills and role-specific keywords to improve resume-job alignment.",
+                  "after": "Achieved an accuracy rate of 90% in identifying missing skills and role-specific keywords, significantly improving resume-job alignment for users.",
+                  "reason": "Quantifies the accuracy of the identification process."
+                },
+                {
+                  "before": "Generated actionable feedback to help users optimize resumes for ATS screening.",
+                  "after": "Generated comprehensive, actionable feedback, leading to an average 25% increase in estimated ATS match rates for user resumes.",
+                  "reason": "Quantifies the positive impact and outcome of the feedback generated."
+                },
+                {
+                  "before": "B.Tech in Computer Science and Engineering (2023 - Present)",
+                  "after": "B.Tech in Computer Science and Engineering, CVR College of Engineering, Hyderabad (Expected Graduation: May 2027)",
+                  "reason": "Provides a clearer expected graduation date, which is helpful for recruiters."
+                },
+                {
+                  "before": "Strong foundation in data structus, backend development, and API integration.",
+                  "after": "Possess a strong foundational knowledge in Advanced Data Structures, Algorithms, robust backend development, and seamless API integration, leveraging Java and JavaScript ecosystems.",
+                  "reason": "Corrects spelling, adds 'Algorithms' explicitly, and connects the foundation to specific language ecosystems."
+                },
+                {
+                  "before": "Bhavishya Junior College, Hyderabad MPC – Percentage: 96.5% (2021 - 2023)",
+                  "after": "Bhavishya Junior College, Hyderabad | MPC (Mathematics, Physics, Chemistry) – 96.5% (2021 - 2023)",
+                  "reason": "Uses consistent formatting and clarifies the 'MPC' abbreviation for better readability."
+                },
+                {
+                  "before": "Sree Vidya Peeth School, Nalgonda CBSE – Secondary Education (2021) Percentage: 73%",
+                  "after": "Sree Vidya Peeth School, Nalgonda | CBSE Secondary Education – 73% (2021)",
+                  "reason": "Standardizes formatting for educational entries for improved consistency and readability."
+                }
+              ],
+              "summary": [
+                {
+                  "before": "Computer Science undergraduate with hands-on experiavnce in building web applications using Jva, JavaScript, React.js, and REST APIs. Strong foundation in data structus, backend development, and API integration. Seeking an entry-level Software Developer or Web Developer role.",
+                  "after": "Highly motivated Computer Science undergraduate (Expected Graduation: May 2027) with hands-on experience in full-stack web development, specializing in Java, JavaScript, React.js, Node.js, and RESTful API integration. Proven ability to build responsive web applications and develop robust backend solutions, coupled with a strong foundation in Data Structures and Algorithms. Eager to leverage technical skills in an entry-level Software Developer or Web Developer role, contributing to innovative projects and growth-oriented teams.",
+                  "reason": "Corrects typos, adds specific technologies from the skills section, includes graduation details, and strengthens the overall impact and target role alignment."
+                }
+              ],
+              "skills": [
+                {
+                  "current": "Data Structures",
+                  "optimized": "Advanced Data Structures (as certified)"
+                }
+              ]
+            },
+            "learningRoadmap": [
+              {
+                "skill": "Docker & Containerization",
+                "resources": [
+                  "Docker Crash Course for Absolute Beginners (TechWorld with Nana - YouTube)",
+                  "Docker for Developers (Udemy - Stephen Grider or Maximilian Schwarzmüller)",
+                  "Official Docker Documentation: Get Started Guides"
+                ]
+              },
+              {
+                "skill": "Unit Testing (JavaScript/React)",
+                "resources": [
+                  "Jest Crash Course (Traversy Media - YouTube)",
+                  "Testing React Apps with Jest and React Testing Library (Kent C. Dodds's official guides & courses)",
+                  "Modern JavaScript From The Beginning 2.0 (Udemy - includes testing)"
+                ]
+              },
+              {
+                "skill": "Cloud Fundamentals (e.g., AWS)",
+                "resources": [
+                  "AWS Cloud Practitioner Essentials (Amazon Training and Certification)",
+                  "FreeCodeCamp AWS Certified Cloud Practitioner Course (YouTube)",
+                  "Introduction to Cloud Computing (Coursera - IBM)"
+                ]
+              }
+            ],
+            "interviewQuestions": {
+              "behavioral": [
+                "Tell me about a time you faced a significant technical challenge during one of your projects, like the Weather Forecast Application. How did you approach it, and what was the outcome?",
+                "Your resume lists 'Teamwork' as a soft skill. Describe a situation where you collaborated effectively on a project, what your role was, and how you contributed to the team's success.",
+                "Can you give an example of a time you received constructive feedback on your code or project? How did you respond, and what did you learn from it?",
+                "As an undergraduate, you've completed several projects. How do you prioritize tasks and manage your time when working on multiple projects or academic commitments simultaneously?",
+                "You built a Resume Analyzer. What was your biggest learning or surprise during that project, and how did it change your perspective on resume optimization or recruitment processes?"
+              ],
+              "technical": [
+                "In your Weather Forecast Application, you integrated a public API. Can you explain the challenges of handling asynchronous API calls in React.js and how you ensured a responsive user experience?",
+                "For your Resume Analyzer project, you used keyword extraction. What algorithms or data structures did you consider for this process, and why did you choose your particular approach?",
+                "Given your experience with Java, JavaScript, and Node.js, describe a scenario where you would choose one over the others for a specific backend task, explaining your reasoning for the selection.",
+                "You've worked with SQL, SQLite, and MongoDB. Can you explain the fundamental differences between relational and NoSQL databases, and when would you opt for MongoDB over a SQL database in a web application?",
+                "How do you approach debugging a full-stack application that uses React.js on the frontend and Node.js/Express.js on the backend, especially when an issue might stem from API integration?"
+              ]
+            }
+          },
+          "extractedText": "PONUGOTI SRIRAM \n \nPROFESSIONAL SUMMARY \n \nComputer Science undergraduate with hands-on experiavnce in building web applications using Jva, \nJavaScript, React.js, and REST APIs. Strong foundation in data structus, backend development, and API \nintegration. Seeking an entry-level Software Developer or Web Developer role. \nEDUCATN \n \nCVR College of Engineering, Hyderabad \nB.Tech in Computer Science and Engineering (2023 - Present) \nExpected Graduation: 2027 \nBhavishya Junior College, Hyderabad \nMPC – Percentage: 96.5% (2021 - 2023) \nSree  Vidya  Peeth  School,  Nalgonda \nCBSE – Secondary  Education  (2021) \nPercentage: 73% \nSKILS \n \nProgramming: Java, Python, JavaScript \nWeb Technologies: HTML, CSS, React.js, Tailwind CSS \nBackend & Tools: Node.js, Express.js, Git, REST APIs \nDatabases: SQL, SQLite, MongoDB \nCore Subjects: Data Structures, Algorithms, DBMS, OOP, Operating Systems, Web Development \nSoft Skills: Public Speaking, Leadership, Teamwork, Active Listening, Networking \n \nPJECTS \n \nWeather Forecast Application \n• \nBuilt a responsive web application integrating a public Weather API to display real-time temperature, \nhumidity, and weather conditions. \n• Implemented asynchronous API calls and JSON parsing to handle dynamic data for multiple locations. \n• Improved application responsiveness and overall user experience through optimized API handling. \nResume Analyzer \n• \nEngineered a resume analysis tool to compare resumes against job descriptions using keyword \nextraction. \n• Identified missing skills and role-specific keywords to improve resume-job alignment. \n• Generated actionable feedback to help users optimize resumes for ATS screening. \nCERTIFICATIONS \n \n• E-Box Certification – Advanced Data Structures using Java \n• E-Box Certification – Web Development with HTML, CSS, and JavaScript \n• Introduction to Networking for Cyber Professionals – Zscaler Academy"
+        },
+        {
           "id": "1775028532013",
           "fileName": "SRIRAM RESUME  (1) (3) (1) (1).pdf",
           "atsScore": 50,
