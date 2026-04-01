@@ -32,18 +32,119 @@ app.use(express.json());
 const upload = multer({
     storage: multer.memoryStorage(),
     fileFilter: (req, file, cb) => {
-        if (file.mimetype === 'application/pdf') {
+        const allowedTypes = ['application/pdf', 'text/plain', 'image/jpeg', 'image/png'];
+        if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new Error('Only PDF files are allowed!'), false);
+            cb(new Error('Invalid file type! Only PDF, TXT, and Images are allowed.'), false);
         }
     }
 });
 
+import mongoose from 'mongoose';
+
+// Connect to MongoDB
+let isDBConnected = false;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/resume_analyzer";
+
+mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 2000 }).then(() => {
+    console.log("Connected to MongoDB successfully!");
+    isDBConnected = true;
+}).catch(err => {
+    console.warn("⚠️ MongoDB not running locally! Falling back to local JSON file database mode.");
+    isDBConnected = false;
+    if (!fs.existsSync('local_db.json')) fs.writeFileSync('local_db.json', JSON.stringify({ users: [] }));
+});
+
+// JSON DB Fallback Functions
+const getDB = () => JSON.parse(fs.readFileSync('local_db.json'));
+const saveDB = (data) => fs.writeFileSync('local_db.json', JSON.stringify(data, null, 2));
+
+// User Schema (Only used if MongoDB connects)
+const userSchema = new mongoose.Schema({
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }, 
+    profile: {
+        name: { type: String, default: '' },
+        altEmail: { type: String, default: '' },
+        mobile: { type: String, default: '' },
+        gender: { type: String, default: '' },
+        designation: { type: String, default: '' },
+        basicDetails: { type: String, default: '' }
+    }
+});
+const User = mongoose.model('User', userSchema);
+
+// Auth Routes
+app.post('/api/auth/signup', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) return res.status(400).json({ error: "Email and password are required." });
+        
+        if (isDBConnected) {
+            const exists = await User.findOne({ email });
+            if (exists) return res.status(400).json({ error: "Email already registered." });
+            
+            const user = new User({ email, password, profile: {} });
+            await user.save();
+            return res.json({ success: true, email: user.email, profile: user.profile });
+        } else {
+            const db = getDB();
+            if (db.users.find(u => u.email === email)) return res.status(400).json({ error: "Email already registered." });
+            
+            const newUser = { email, password, profile: {} };
+            db.users.push(newUser);
+            saveDB(db);
+            return res.json({ success: true, email: newUser.email, profile: newUser.profile });
+        }
+    } catch (e) {
+        return res.status(500).json({ error: "Signup failed: " + e.message });
+    }
+});
+
+app.post('/api/auth/signin', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (isDBConnected) {
+            const user = await User.findOne({ email });
+            if (!user || user.password !== password) return res.status(401).json({ error: "Invalid email or password." });
+            return res.json({ success: true, email: user.email, profile: user.profile });
+        } else {
+            const db = getDB();
+            const user = db.users.find(u => u.email === email);
+            if (!user || user.password !== password) return res.status(401).json({ error: "Invalid email or password." });
+            return res.json({ success: true, email: user.email, profile: user.profile });
+        }
+    } catch (e) {
+        return res.status(500).json({ error: "Signin failed: " + e.message });
+    }
+});
+
+app.post('/api/profile', async (req, res) => {
+    try {
+        const { email, profile } = req.body;
+        if (!email) return res.status(400).json({ error: "Email is required to update profile." });
+        
+        if (isDBConnected) {
+            const user = await User.findOne({ email });
+            if (!user) return res.status(404).json({ error: "User not found." });
+            user.profile = { ...user.profile.toObject(), ...profile };
+            await user.save();
+            return res.json({ success: true, profile: user.profile });
+        } else {
+            const db = getDB();
+            const userIndex = db.users.findIndex(u => u.email === email);
+            if (userIndex === -1) return res.status(404).json({ error: "User not found." });
+            db.users[userIndex].profile = { ...db.users[userIndex].profile, ...profile };
+            saveDB(db);
+            return res.json({ success: true, profile: db.users[userIndex].profile });
+        }
+    } catch (e) {
+        return res.status(500).json({ error: "Profile update failed: " + e.message });
+    }
+});
+
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
-
-
 const analyzeResumeWithAI = async (text, jobDescription = '') => {
     let jobMatchSchema = '';
     let jobMatchInstruction = '';
@@ -167,15 +268,30 @@ app.post('/api/analyze', async (req, res) => {
             console.log("File received");
             const dataBuffer = req.file.buffer;
 
-            console.log("Before PDF parse");
+            console.log("Before standard parse");
             try {
-                const parsed = await pdfParse(dataBuffer);
-                text = parsed.text ? parsed.text.trim() : '';
-            } catch (pdfError) {
-                console.error(pdfError);
-                return res.status(400).json({ success: false, error: "PDF parsing failed" });
+                if (req.file.mimetype === 'application/pdf') {
+                    const parsed = await pdfParse(dataBuffer);
+                    text = parsed.text ? parsed.text.trim() : '';
+                } else if (req.file.mimetype === 'text/plain') {
+                    text = dataBuffer.toString('utf-8').trim();
+                } else if (req.file.mimetype.startsWith('image/')) {
+                    const response = await ai.models.generateContent({
+                        model: 'gemini-2.5-flash',
+                        contents: [
+                            { role: 'user', parts: [
+                                { inlineData: { data: dataBuffer.toString('base64'), mimeType: req.file.mimetype } },
+                                { text: "Extract and return ALL text from this resume image perfectly. Do not summarize, just transcribe the raw text exactly as seen." }
+                            ]}
+                        ]
+                    });
+                    text = response.text ? response.text.trim() : '';
+                }
+            } catch (parseError) {
+                console.error(parseError);
+                return res.status(400).json({ success: false, error: "File parsing failed or corrupted format" });
             }
-            console.log("PDF parsed");
+            console.log("File dynamically parsed");
         } else {
             console.log("Raw text received for re-analysis");
             text = req.body.text.trim();
