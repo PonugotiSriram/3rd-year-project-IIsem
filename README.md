@@ -10,7 +10,6 @@ An advanced, AI-powered resume analysis and optimization platform. This applicat
 *   **ATS Scoring & Dashboard:** Provides an immediate ATS score along with dynamic sub-metrics (Impact Parsing, Keyword Density, and Brevity Ratings) presented in a modern, animated glass-morphism UI.
 *   **Interactive "Live Edit" Workspace:** A powerful UI that highlights spelling errors, weak phrases, and skill gaps directly on your resume text. Features an advanced regex-powered string matching algorithm so you can click any AI suggestion to seamlessly merge it into your document.
 *   **Version Control:** Save your edits, compare versions side-by-side using "Split View," and download your finalized, optimized resume.
-*   **Impact Booster:** Transform weak, generic bullet points into strong, metrics-driven achievements through contextual AI follow-up questions.
 *   **Predictive Interview Engine:** Automatically generates 5 custom technical and 5 behavioral interview questions based exclusively on the skills and projects found in the resume.
 *   **Dynamic Learning Roadmap:** Identifies missing skills compared to the job description and recommends concrete courses and resources.
 

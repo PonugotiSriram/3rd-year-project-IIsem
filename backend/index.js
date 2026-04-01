@@ -71,7 +71,8 @@ const userSchema = new mongoose.Schema({
         gender: { type: String, default: '' },
         designation: { type: String, default: '' },
         basicDetails: { type: String, default: '' }
-    }
+    },
+    resumeHistory: { type: Array, default: [] }
 });
 const User = mongoose.model('User', userSchema);
 
@@ -143,6 +144,27 @@ app.post('/api/profile', async (req, res) => {
         return res.status(500).json({ error: "Profile update failed: " + e.message });
     }
 });
+
+app.get('/api/history', async (req, res) => {
+    try {
+        const { email } = req.query;
+        if (!email) return res.status(400).json({ error: "Email is required" });
+
+        if (isDBConnected) {
+            const user = await User.findOne({ email });
+            if (!user) return res.status(404).json({ error: "User not found" });
+            return res.json({ success: true, history: user.resumeHistory || [] });
+        } else {
+            const db = getDB();
+            const user = db.users.find(u => u.email === email);
+            if (!user) return res.status(404).json({ error: "User not found" });
+            return res.json({ success: true, history: user.resumeHistory || [] });
+        }
+    } catch (e) {
+        return res.status(500).json({ error: "Failed to fetch history" });
+    }
+});
+
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const analyzeResumeWithAI = async (text, jobDescription = '') => {
@@ -342,6 +364,37 @@ app.post('/api/analyze', async (req, res) => {
             basics
         };
 
+        const email = req.body.email;
+        if (email) {
+            const historyEntry = {
+                id: Date.now().toString(),
+                fileName: req.file ? req.file.originalname : "Optimized_Resume.txt",
+                atsScore: aiAnalysis.atsScore,
+                impact: Math.min(100, aiAnalysis.atsScore + 12),
+                keywords: Math.min(100, aiAnalysis.atsScore - 5),
+                brevity: Math.min(100, aiAnalysis.atsScore + 5),
+                date: new Date().toISOString().split('T')[0],
+                analysis: aiAnalysis,
+                extractedText: text
+            };
+            if (isDBConnected) {
+                const user = await User.findOne({ email });
+                if (user) {
+                    if (!user.resumeHistory) user.resumeHistory = [];
+                    user.resumeHistory = [historyEntry, ...user.resumeHistory].slice(0, 50);
+                    await user.save();
+                }
+            } else {
+                const db = getDB();
+                const userIndex = db.users.findIndex(u => u.email === email);
+                if (userIndex !== -1) {
+                    if (!db.users[userIndex].resumeHistory) db.users[userIndex].resumeHistory = [];
+                    db.users[userIndex].resumeHistory = [historyEntry, ...db.users[userIndex].resumeHistory].slice(0, 50);
+                    saveDB(db);
+                }
+            }
+        }
+
         return res.json({
             success: true,
             extractedText: text,
@@ -358,30 +411,6 @@ app.post('/api/analyze', async (req, res) => {
     }
 });
 
-app.post('/api/boost-impact', async (req, res) => {
-    try {
-        const { sentence, metric } = req.body;
-        if (!sentence) return res.status(400).json({ error: "Missing sentence" });
-
-        let prompt = "";
-        if (!metric) {
-            prompt = `The user wants to improve this boring resume sentence by adding a metric/number: "${sentence}". Ask a single, direct question to extract a specific numerical metric (e.g. "How many users?", "What percentage faster?", "How large was the team?"). Keep the question under 15 words. ONLY RETURN THE QUESTION. NO INTROS.`;
-        } else {
-            prompt = `Rewrite this resume sentence to seamlessly include this metric/result: "${metric}". Sentence: "${sentence}". Make it sound highly professional, action-oriented, and ATS-friendly. ONLY RETURN THE REWRITTEN SENTENCE. NO INTROS.`;
-        }
-
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: prompt,
-            config: { maxOutputTokens: 256 }
-        });
-
-        return res.json({ result: response.text.trim() });
-    } catch (e) {
-        console.error(e);
-        return res.status(500).json({ error: "Failed to boost impact." });
-    }
-});
 
 const PORT = 5000;
 app.listen(PORT, '0.0.0.0', () => {
