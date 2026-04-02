@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  GeeksForGeeks & Google AI Studio Base Overrides 
+  The custom colors configured in tailwind.config.js will natively cascade through here!
+*/
+@layer base {
+  body {
+    @apply transition-colors duration-300;
+    overflow-x: hidden;
+  }
+
+  /* ✨ AUTO DARK MODE ENFORCER ✨ */
+  /* This prevents hardcoded bg-white and text-gray-900 from breaking in Dark Mode! */
+  .dark .bg-white {
+    background-color: theme('colors.gray.800') !important;
+    border-color: theme('colors.gray.700') !important;
+  }
+  
+  .dark .bg-gray-50, .dark .bg-gray-50\/50, .dark .bg-gray-50\/30 {
+    background-color: theme('colors.gray.900') !important;
+    border-color: theme('colors.gray.700') !important;
+  }
+
+  .dark .text-gray-900, .dark .text-gray-800 {
+    color: theme('colors.gray.100') !important;
+  }
+
+  .dark .text-gray-700, .dark .text-gray-600, .dark .text-gray-500 {
+    color: theme('colors.gray.300') !important;
+  }
+
+  .dark .border-gray-100, .dark .border-gray-200, .dark .border-gray-100\/50 {
+    border-color: theme('colors.gray.700') !important;
+  }
+
+  /* Dynamic Semantic Background Tints for Data Cards */
+  .dark .bg-red-50, .dark .bg-red-50\/50, .dark .bg-red-100 { 
+    background-color: rgb(127 29 29 / 0.2) !important; 
+    border-color: rgb(127 29 29 / 0.4) !important;
+  }
+  .dark .text-red-900 { color: theme('colors.red.300') !important; }
+
+  .dark .bg-blue-50, .dark .bg-blue-50\/50, .dark .bg-blue-100 { 
+    background-color: rgb(30 58 138 / 0.2) !important; 
+    border-color: rgb(30 58 138 / 0.4) !important;
+  }
+  .dark .text-blue-900 { color: theme('colors.blue.300') !important; }
+
+  .dark .bg-indigo-50, .dark .bg-indigo-50\/50 { 
+    background-color: rgb(49 46 129 / 0.2) !important; 
+    border-color: rgb(49 46 129 / 0.4) !important;
+  }
+  .dark .text-indigo-900 { color: theme('colors.indigo.300') !important; }
+
+  .dark .bg-purple-50, .dark .bg-purple-50\/50 { 
+    background-color: rgb(88 28 135 / 0.2) !important; 
+    border-color: rgb(88 28 135 / 0.4) !important;
+  }
+  .dark .text-purple-900 { color: theme('colors.purple.300') !important; }
+
+  .dark .bg-green-50, .dark .bg-green-50\/50, .dark .bg-green-50\/30, .dark .bg-green-100 { 
+    background-color: rgb(20 83 45 / 0.2) !important; 
+    border-color: rgb(20 83 45 / 0.4) !important;
+  }
+  .dark .text-green-900 { color: theme('colors.green.300') !important; }
+}
+
+@keyframes scanner {
+  0% { top: -10px; opacity: 0; }
+  10% { opacity: 1; }
+  90% { top: 100%; opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.animate-scanner {
+  animation: scanner 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Ambient Background Structure Blobs */
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) skewX(12deg); }
+  100% { transform: translateX(300%) skewX(12deg); }
+}
