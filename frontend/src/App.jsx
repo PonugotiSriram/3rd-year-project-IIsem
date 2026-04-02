@@ -775,21 +775,25 @@ function App() {
         // Sort by length descending to match longest phrases first to prevent sub-matches
         targets.sort((a, b) => (b.bad?.length || 0) - (a.bad?.length || 0));
 
-        const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+        if (targets.length > 0) {
+            try {
+                const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+                const regexStr = targets.map(t => `(?<![a-zA-Z0-9])${escapeRegExp(t.bad)}(?![a-zA-Z0-9])`).join('|');
+                const regex = new RegExp(`(${regexStr})`, 'gi');
 
-        targets.forEach(({ bad, good }) => {
-            if (bad && good) {
-                try {
-                    const regexStr = `(?<![a-zA-Z0-9])${escapeRegExp(bad)}(?![a-zA-Z0-9])`;
-                    const regex = new RegExp(regexStr, 'gi');
-                    newText = newText.replace(regex, good);
-                } catch (e) {
-                    console.error("Regex replacement failed for:", bad, e);
-                    // Fallback to simple replacement
-                    newText = newText.split(bad).join(good);
-                }
+                newText = newText.replace(regex, (match) => {
+                    const cleanTarget = (s) => s.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                    const target = targets.find(t => cleanTarget(t.bad) === cleanTarget(match));
+                    return target ? target.good : match;
+                });
+            } catch (e) {
+                console.error("Regex replacement failed:", e);
+                // Fallback to simple replace
+                targets.forEach(({ bad, good }) => {
+                    if (bad && good) newText = newText.split(bad).join(good);
+                });
             }
-        });
+        }
 
         setText(newText);
         setAppliedSuggestions([]);
@@ -877,33 +881,33 @@ function App() {
         // Sort by length descending to match longest phrases first to prevent sub-matches
         highlightTargets.sort((a, b) => b.match.length - a.match.length);
 
-        const renderText = (showAIStyle) => {
+        // Pass a subset of targets if we want to do nested highlighting or just text
+        const renderText = (rawTextSub, targetsSubset, showAIStyle, isNested = false) => {
+            if (targetsSubset.length === 0) return rawTextSub;
+            
             try {
-                // By replacing literal spaces with \s+, we make the highlighter immune to newline/spacing differences.
                 const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
-                const regexStr = highlightTargets.map(t => `(?<![a-zA-Z0-9])${escapeRegExp(t.match)}(?![a-zA-Z0-9])`).join('|');
+                const regexStr = targetsSubset.map(t => `(?<![a-zA-Z0-9])${escapeRegExp(t.match)}(?![a-zA-Z0-9])`).join('|');
                 const regex = new RegExp(`(${regexStr})`, 'gi');
 
                 let elements = [];
                 let match;
                 let lastIndex = 0;
 
-                while ((match = regex.exec(rawText)) !== null) {
+                while ((match = regex.exec(rawTextSub)) !== null) {
                     if (match[0] === '') break;
-                    elements.push(rawText.substring(lastIndex, match.index));
+                    elements.push(rawTextSub.substring(lastIndex, match.index));
 
                     const cleanTarget = (s) => s.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                    const target = highlightTargets.find(t => cleanTarget(t.match) === cleanTarget(match[0]));
+                    const target = targetsSubset.find(t => cleanTarget(t.match) === cleanTarget(match[0]));
 
                     if (showAIStyle) {
-                        // In AI Improved mode, just show the suggested text nicely formatted
                         elements.push(
-                            <span key={match.index} className="px-1 rounded-sm bg-green-100 dark:bg-green-900/40 text-green-900 dark:text-green-300 font-bold transition-colors duration-200">
+                            <span key={`ai-${match.index}`} className="px-1 rounded-sm bg-green-100 dark:bg-green-900/40 text-green-900 dark:text-green-300 font-bold transition-colors duration-200">
                                 {target?.fix || match[0]}
                             </span>
                         );
                     } else {
-                        // Original mode logic
                         let colorClass = "";
                         let hoverClass = "";
                         if (target?.type === 'error') { colorClass = "bg-red-100 text-red-900 border-b-2 border-red-500 dark:bg-red-900/30 dark:text-red-300"; hoverClass = "hover:bg-red-200 dark:hover:bg-red-900/50 cursor-pointer"; }
@@ -911,16 +915,25 @@ function App() {
                         else if (target?.type === 'applied') { colorClass = "bg-green-100 text-green-900 border-b-2 border-green-500 dark:bg-green-900/30 dark:text-green-300"; hoverClass = ""; }
                         else { colorClass = "bg-electric-blue/10 text-electric-blue border-b-2 border-electric-blue/50 dark:bg-electric-blue/20 dark:text-blue-300"; hoverClass = "hover:bg-electric-blue/20 cursor-pointer"; }
 
+                        // If it's a warning or suggestion, recursively highlight spelling inside it.
+                        let innerContent = match[0];
+                        if (!isNested && target?.type !== 'error') {
+                            const spellingTargets = targetsSubset.filter(t => t.type === 'error');
+                            if (spellingTargets.length > 0) {
+                                innerContent = renderText(match[0], spellingTargets, false, true);
+                            }
+                        }
+
                         if (!isActiveEditing) {
                             elements.push(
-                                <span key={match.index} data-bad={match[0]} className={`px-1 rounded-sm ${colorClass} font-semibold transition-all duration-300 inline decoration-clone`}>
-                                    {match[0]}
+                                <span key={`view-${match.index}`} data-bad={match[0]} className={`px-1 rounded-sm ${colorClass} font-semibold transition-all duration-300 inline decoration-clone`}>
+                                    {innerContent}
                                 </span>
                             );
                         } else {
                             elements.push(
                                 <span
-                                    key={match.index}
+                                    key={`edit-${match.index}`}
                                     className="relative group inline decoration-clone transition-all duration-300 cursor-pointer"
                                     data-fix-button="true"
                                     data-bad={match[0]}
@@ -929,7 +942,7 @@ function App() {
                                         if (target?.fix) handleApplySuggestion(e, match[0], target.fix);
                                     }}
                                 >
-                                    <span className={`px-1 rounded-sm ${colorClass} ${hoverClass} font-semibold transition-colors duration-200 inline decoration-clone`}>{match[0]}</span>
+                                    <span className={`px-1 rounded-sm ${colorClass} ${hoverClass} font-semibold transition-colors duration-200 inline decoration-clone`}>{innerContent}</span>
                                     <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block bg-gray-900 border border-gray-700 text-white text-[11px] px-3 py-2 rounded-lg shadow-2xl whitespace-normal w-max max-w-[280px] text-center z-[999] tracking-wide font-sans select-none cursor-pointer leading-relaxed">
                                         <span className="text-gray-400 font-normal">{target?.prefix}</span> <span className="font-semibold text-blue-300">{target?.fix}</span> <span className="text-gray-500 text-[9px] ml-1 block mt-0.5">(Click to fix)</span>
                                     </span>
@@ -939,11 +952,16 @@ function App() {
                     }
                     lastIndex = regex.lastIndex;
                 }
-                elements.push(rawText.substring(lastIndex));
+                elements.push(rawTextSub.substring(lastIndex));
+                
+                // Prevent browser layout quirks with absolute tooltips by unboxing single text nodes
+                if (elements.length === 1 && typeof elements[0] === 'string') {
+                    return elements[0];
+                }
                 return elements;
             } catch (e) {
                 console.error("Regex Highlight Error:", e);
-                return rawText;
+                return rawTextSub;
             }
         };
 
@@ -957,18 +975,22 @@ function App() {
                     <div className="flex gap-6 flex-1 overflow-hidden">
                         <div className="flex-1 overflow-auto bg-red-50/30 dark:bg-red-900/10 p-4 rounded-xl border border-red-100 dark:border-red-900/30">
                             <div className="sticky top-0 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 text-xs font-bold px-3 py-1.5 rounded-lg mb-4 text-center z-10 shadow-sm">Original Resume</div>
-                            {renderText(false)}
+                            {renderText(rawText, highlightTargets, false)}
                         </div>
                         <div className="flex-1 overflow-auto bg-green-50/30 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-900/30">
                             <div className="sticky top-0 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 text-xs font-bold px-3 py-1.5 rounded-lg mb-4 text-center z-10 shadow-sm">AI Improved Suggestions</div>
-                            {renderText(true)}
+                            {renderText(rawText, highlightTargets, true)}
                         </div>
                     </div>
                 </div>
             );
         }
 
-        return renderText(false);
+        if (viewMode === 'final') {
+            return renderText(rawText, [], false);
+        }
+
+        return renderText(rawText, highlightTargets, false);
     };
 
     return (
