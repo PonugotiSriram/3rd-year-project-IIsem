@@ -71,11 +71,12 @@ An advanced, AI-powered resume analysis and optimization platform built as a **3
    npm install
    ```
 3. Configure Environment Variables:
-   * Open the `.env` file in the backend directory.
-   * Add your Gemini API Key and optional MongoDB URI:
+   * Create a new file named `.env` inside the `backend` directory.
+   * Add your Gemini API Key and optional MongoDB URI to this file:
      ```env
      GEMINI_API_KEY=your_google_gemini_api_key_here
-     MONGODB_URI=your_mongodb_connection_string
+     PORT=5000
+     MONGODB_URI=your_mongodb_connection_string # (Optional)
      ```
 4. Start the backend development server:
    ```bash

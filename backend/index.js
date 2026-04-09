@@ -9,7 +9,11 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import { jsonrepair } from 'jsonrepair';
 
-dotenv.config();
+import { fileURLToPath } from 'url';
+import path from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 process.on("uncaughtException", (err) => {
     console.error("UNCAUGHT EXCEPTION:", err);
@@ -167,6 +171,31 @@ app.get('/api/history', async (req, res) => {
 
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+const generateContentWithFallback = async (options) => {
+    const modelsToTry = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
+    let lastError = null;
+    let delay = 2000;
+    
+    for (let attempt = 1; attempt <= 3; attempt++) {
+        for (const currentModel of modelsToTry) {
+            try {
+                const currentOptions = { ...options, model: currentModel };
+                const response = await ai.models.generateContent(currentOptions);
+                return response;
+            } catch (error) {
+                console.warn(`[Attempt ${attempt}] Model ${currentModel} failed: ${error.message}`);
+                lastError = error;
+            }
+        }
+        if (attempt < 3) {
+            console.log(`All models failed. Waiting ${delay}ms before retrying...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            delay *= 2; 
+        }
+    }
+    throw lastError; 
+};
 const analyzeResumeWithAI = async (text, jobDescription = '') => {
     let jobMatchSchema = '';
     let jobMatchInstruction = '';
@@ -227,7 +256,7 @@ const analyzeResumeWithAI = async (text, jobDescription = '') => {
     `;
 
     try {
-        const response = await ai.models.generateContent({
+        const response = await generateContentWithFallback({
             model: "gemini-2.5-flash",
             contents: prompt,
             config: {
@@ -298,7 +327,7 @@ app.post('/api/analyze', async (req, res) => {
                 } else if (req.file.mimetype === 'text/plain') {
                     text = dataBuffer.toString('utf-8').trim();
                 } else if (req.file.mimetype.startsWith('image/')) {
-                    const response = await ai.models.generateContent({
+                    const response = await generateContentWithFallback({
                         model: 'gemini-2.5-flash',
                         contents: [
                             { role: 'user', parts: [
