@@ -173,11 +173,12 @@ app.get('/api/history', async (req, res) => {
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const generateContentWithFallback = async (options) => {
-    const modelsToTry = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
+    // Only use models available on the free tier to prevent 404 or 429 Limit 0 errors.
+    const modelsToTry = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
     let lastError = null;
-    let delay = 2000;
+    let delay = 3000; // Increased base delay to handle 503s better
     
-    for (let attempt = 1; attempt <= 3; attempt++) {
+    for (let attempt = 1; attempt <= 4; attempt++) {
         for (const currentModel of modelsToTry) {
             try {
                 const currentOptions = { ...options, model: currentModel };
@@ -188,8 +189,8 @@ const generateContentWithFallback = async (options) => {
                 lastError = error;
             }
         }
-        if (attempt < 3) {
-            console.log(`All models failed. Waiting ${delay}ms before retrying...`);
+        if (attempt < 4) {
+            console.log(`[Attempt ${attempt}] Models failed handling high demand. Waiting ${delay}ms...`);
             await new Promise(resolve => setTimeout(resolve, delay));
             delay *= 2; 
         }
